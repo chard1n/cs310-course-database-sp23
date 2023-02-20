@@ -2,7 +2,7 @@ package edu.jsu.mcis.cs310.coursedb.dao;
 
 import java.sql.*;
 import com.github.cliftonlabs.json_simple.*;
-import java.util.ArrayList;
+
 
 public class DAOUtility {
     
@@ -15,12 +15,31 @@ public class DAOUtility {
         try {
         
             if (rs != null) {
+                
+                ResultSetMetaData metadata = rs.getMetaData();
+                int numCol = metadata.getColumnCount();
+                
+                while (rs.next()){
+                    
+                    JsonObject obj = new JsonObject();
+                    
+                    for(int i = 1; i <= numCol; i++){
+                        
+                        String colName = metadata.getColumnName(i);
+                        Object columnValue = rs.getString(i);
+                        
+                        obj.put(colName, columnValue);
+                    }
+                    
+                    records.add(obj);
+                }
 
-                // INSERT YOUR CODE HERE
-
+                
             }
-            
+
         }
+            
+        
         catch (Exception e) {
             e.printStackTrace();
         }
